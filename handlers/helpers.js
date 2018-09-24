@@ -107,9 +107,9 @@ function convertDate(dateToConvert, guildid) {
         minutes = ".5";
     }
     let offset = parseFloat(hour + minutes);
-    let utc = dateToConvert.getTime() + (dateToConvert.getTimezoneOffset() * 60000);
+    let utc = dateToConvert.getTime() + dateToConvert.getTimezoneOffset() * 60000;
     let utcdate = new Date(utc);
-    let nd = new Date(utc + (3600000*offset));
+    let nd = new Date(utc + 3600000*offset);
     return nd;
 }
 

@@ -121,7 +121,7 @@ function createDayMap(message) {
 }
 
 function checkDateMatch (date1, date2) {
-    return (date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate())
+    return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
 }
 
 function getEvents(message, calendarID, dayMap) {
@@ -262,10 +262,10 @@ function postCalendar(message, dayMap) {
         });
     }
     generateCalendar(message, dayMap).then((embed) => {
-        message.channel.send({embed}).then((sent) => {
-          calendar["calendarMessageId"] = sent.id;
-          sent.pin();
-        })
+        message.channel.send({ embed }).then((sent) => {
+            calendar["calendarMessageId"] = sent.id;
+            sent.pin();
+        });
     }).then((confirm) => {
         setTimeout(function func() {
             helpers.writeGuildSpecific(message.guild.id, calendar, "calendar");
@@ -289,11 +289,11 @@ function updateCalendar(message, dayMap, human) {
   let messageId = calendar["calendarMessageId"];
   message.channel.fetchMessage(messageId).then((m) => {
       generateCalendar(message, dayMap).then((embed) => {
-          m.edit({embed});
+          m.edit({ embed });
           if ((timerCount[message.guild.id] === 0 || !timerCount[message.guild.id]) && human) {
-            startUpdateTimer(message);
+              startUpdateTimer(message);
           }
-      })
+      });
   }).catch((err) => {
       if (err.code === 1008) {
           helpers.log("error fetching previous calendar message in guild: " + message.guild.id + ": " + err);
@@ -436,7 +436,7 @@ function deleteEvent(message, calendarId, dayMap) {
         }
         else {
             let temp = parseInt(searchTime.split("pm")[0],10);
-            dTime = String((temp + 12));
+            dTime = String(temp + 12);
         }
     }
     if (searchTime.indexOf("am") !== -1) {
@@ -457,7 +457,7 @@ function deleteEvent(message, calendarId, dayMap) {
     for (let j = 0; j < calendar[key].length; j++) {
         let eventDate = new Date(calendar[key][j]["start"]["dateTime"]);
         let searchDate = new Date(delDate);
-        if (Math.abs((eventDate - searchDate)) < 100) {
+        if (Math.abs(eventDate - searchDate) < 100) {
             message.channel.send(`Are you sure you want to delete the event **${calendar[key][j]["summary"]}** on ${searchDay} at ${searchTime}? **(y/n)**`)
             .then((res) => {
                 res.delete(10000);
@@ -521,7 +521,7 @@ function displayStats(message) {
     .setURL("https://github.com/seanecoffey/Niles")
     .addField("Servers", bot.client.guilds.size, true)
     .addField("Uptime", moment.duration(process.uptime(), "seconds").format("dd:hh:mm:ss"), true)
-    .addField("Ping", `${(bot.client.ping).toFixed(0)} ms`, true)
+    .addField("Ping", `${bot.client.ping.toFixed(0)} ms`, true)
     .addField("RAM Usage", `${(process.memoryUsage().rss / 1048576).toFixed()}MB/${(os.totalmem() > 1073741824 ? (os.totalmem() / 1073741824).toFixed(1) + " GB" : (os.totalmem() / 1048576).toFixed() + " MB")}
     (${(process.memoryUsage().rss / os.totalmem() * 100).toFixed(2)}%)`, true)
     .addField("System Info", `${process.platform} (${process.arch})\n${(os.totalmem() > 1073741824 ? (os.totalmem() / 1073741824).toFixed(1) + " GB" : (os.totalmem() / 1048576).toFixed(2) + " MB")}`, true)
